@@ -38,7 +38,7 @@ def show_predict(pict_num,x_test123,reload_sm_keras):
     plt.imshow(a,cmap="binary")
     plt.show()
 def main():
-    export_path = '/home/allen/dl_grasp_src/tensorflow_sample/SaveNet'
+    export_path = '/home/allen/dl_grasp/src/tensorflow_sample/minist_number/SaveNet'
     #reload_sm_keras = keras.models.load_model(export_path)
     reload_sm_keras = tf.keras.models.load_model(export_path)
     reload_sm_keras.summary()

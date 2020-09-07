@@ -55,7 +55,7 @@ def main():
     #test CNN on testdata
     print('test data mean:',np.mean(CNN.predict_classes(x_test)==y_test))
     print('save CNN')
-    export_path='/home/allen/dl_grasp_src/tensorflow_sample/SaveNet'
+    export_path='/home/allen/dl_grasp/src/tensorflow_sample/minist_number/SaveNet'
     CNN.save(export_path, save_format='tf')
     print('Show input shape :', CNN.input_shape)
     ################################
