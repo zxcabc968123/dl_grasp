@@ -23,12 +23,19 @@ import random
 
 def show_predict(pict_num,x_test123,reload_sm_keras):
     a=x_test123[pict_num]
+    print('before')
+    print(a.shape)
     a=a.reshape(-1,28,28,1)
+    print('after')
+    print(a.shape)
     print('Show picture No. %d'%(pict_num+1))
     print(reload_sm_keras.predict(a))
     print('len is : ',reload_sm_keras.predict(a))
+    print('predict shape: {}'.format(reload_sm_keras.predict(a).shape))
     print('predict_number :' ,np.argmax(reload_sm_keras.predict(a)))
-    plt.imshow(a.squeeze(),cmap="gray")
+    #For show image correctly with plt,use squeeze() to delete dimension with '1'
+    a=a.squeeze()
+    plt.imshow(a,cmap="binary")
     plt.show()
 def main():
     export_path = '/home/allen/dl_grasp_src/tensorflow_sample/SaveNet'

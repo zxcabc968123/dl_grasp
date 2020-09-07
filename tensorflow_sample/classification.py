@@ -33,7 +33,7 @@ def main():
     # plt.imshow(x_test[0].squeeze(),cmap="gray")
     # plt.show()
     #create nateworrk
-    CNN=keras.Sequential(name='CNN')
+    CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
     CNN.add(layers.Conv2D(10,(3,3),activation='relu',input_shape=(28,28,1)))
     #add pooling layer 2*2 
