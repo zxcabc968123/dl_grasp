@@ -1,0 +1,2 @@
+/home/allen/dl_grasp/src/rs_d435i/pic/depth/158.jpg 220,298,351,428,1
+/home/allen/dl_grasp/src/rs_d435i/pic/depth/4.jpg 152,195,534,452,1
