@@ -20,7 +20,5 @@ def main():
     reload_sm_keras = tf.keras.models.load_model(export_path)
     reload_sm_keras.summary()
     print(reload_sm_keras.predict([100]))
-
-
 if __name__ == "__main__":
     main()
