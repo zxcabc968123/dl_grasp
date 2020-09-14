@@ -33,8 +33,9 @@ def show_predict(pict_num,x_test123,reload_sm_keras):
     print('len is : ',reload_sm_keras.predict(a))
     print('predict shape: {}'.format(reload_sm_keras.predict(a).shape))
     print('predict_number :' ,np.argmax(reload_sm_keras.predict(a)))
-    #For show image correctly with plt,use squeeze() to delete dimension with '1'
+    #For show image correctly with plt,use squeeze() to delete dimension with '1' result : (1,28,28,1)---(28,28)
     a=a.squeeze()
+    print(a.shape)
     plt.imshow(a,cmap="binary")
     plt.show()
 def main():

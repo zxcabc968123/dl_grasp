@@ -19,8 +19,11 @@ if __name__ == '__main__':
         listener.display_mode = 'depth'
         if(listener.display_mode == 'rgb')and(type(listener.cv_image) is np.ndarray):
             cv2.imshow("rgb module image", listener.cv_image)
-        elif(listener.display_mode == 'depth')and(type(listener.cv_depth) is np.ndarray): 
-            cv2.imshow("depth module image", listener.cv_depth)
+        elif(listener.display_mode == 'depth')and(type(listener.cv_depth) is np.ndarray):
+
+            abc=cv2.cvtColor(listener.cv_depth,cv2.COLOR_BGR2GRAY)
+            cv2.imshow("depth module image", abc)
+
             key_num = cv2.waitKey(10)
             #print(key_num)
             if key_num == 115:

@@ -23,7 +23,10 @@ class Get_image():
         self.take_picture_counter = 0
 
         rospy.Subscriber("/camera/color/image_raw", Image, self.rgb_callback)
+        
         rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
+        
+
         #rospy.Subscriber("/camera/aligned_depth_to_infra1/image_raw", Image, self.depth_callback)
         #rospy.Subscriber("/camera/depth_registered/points", Image, self.depth_callback) 
 

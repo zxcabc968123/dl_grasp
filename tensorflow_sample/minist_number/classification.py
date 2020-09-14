@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
@@ -51,7 +52,7 @@ def main():
     CNN.summary()
     #define the optimizer(how to update parameter) and loss funtion:cross entropy 
     CNN.compile(optimizer=('Adam'),loss=keras.losses.sparse_categorical_crossentropy,metrics=['accuracy'])
-    CNN.fit(x_train,y_train,batch_size=1000,epochs=1)
+    CNN.fit(x_train,y_train,batch_size=1000,epochs=10)
     #test CNN on testdata
     print('test data mean:',np.mean(CNN.predict_classes(x_test)==y_test))
     print('save CNN')
