@@ -36,17 +36,24 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 #         data2.append(data_row["two"])
 #     return (data1,data2)
 TRAIN_DATA_URL = "http://home/allen/dl_grasp/src/rs_d435i/Test/123.csv"
-file_path="/home/allen/dl_grasp/src/grasp_test_sample/data/file.csv"
+file_path="/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv"
 #TRAIN_DATA_URL = "https://storage.googleapis.com/tf-datasets/titanic/train.csv"
+
+def show_batch(dataset):
+    for batch in dataset.take(10):
+        for key,value in batch.items():
+            print("{:20s}: {}".format(key,value.numpy()))
+        print('-----------------')
+
 def get_dataset(file_path):
     dataset = tf.data.experimental.make_csv_dataset(
-    "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv",
+    file_path,
     batch_size=1,
     field_delim=',',
     column_names=['image_path','target_x','target_y'],
     column_defaults=[tf.string, tf.float32,tf.float32],
     na_value="?",
-    num_epochs=1,
+    num_epochs=100,
     shuffle_seed=True,
     ignore_errors=True)
     return dataset
@@ -55,7 +62,8 @@ def main():
     print('train_model_123')
     aa=get_dataset(file_path)
     print('train_model_456')
-    
+    show_batch(aa)
+    #print(aa)
 
 if __name__ == "__main__":
     main()
