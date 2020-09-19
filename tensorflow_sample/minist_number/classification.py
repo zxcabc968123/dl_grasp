@@ -34,6 +34,7 @@ def main():
     # plt.imshow(x_test[0].squeeze(),cmap="gray")
     # plt.show()
     #create nateworrk
+
     CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
     CNN.add(layers.Conv2D(10,(3,3),activation='relu',input_shape=(28,28,1)))
@@ -59,11 +60,15 @@ def main():
     export_path='/home/allen/dl_grasp/src/tensorflow_sample/minist_number/SaveNet'
     CNN.save(export_path, save_format='tf')
     print('Show input shape :', CNN.input_shape)
+
     ################################
-    #print(x_test.shape)
+    print(x_test.shape)
+    print(type(x_test))
     #print(x_test)
-    #print(y_test.shape)
+    print(y_test.shape)
+    print(type(y_test))
     #print(y_test)
+
 
 if __name__ =="__main__":
     
