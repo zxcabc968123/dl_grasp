@@ -16,22 +16,25 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 celsius_q    = np.array([-40, -10,  0,  8, 15, 22,  38],  dtype=float)
-fahrenheit_a = np.array([-40,  14, 32, 46, 59, 72, 100],  dtype=float)
+fahrenheit_a = np.array([[-40,-30],  [14,24], [32,42], [46,56], [59,69], [72,82], [100,110]],  dtype=float)
 
 def main():
     for i,c in enumerate(celsius_q):
         print('{} is {}'.format(c,fahrenheit_a[i]))
     reg=keras.Sequential()
     reg.add(layers.Dense(1,input_shape=[1]))
+    reg.add(layers.Dense(10,input_shape=[1]))
+    reg.add(layers.Dense(10,activation='relu'))
+    reg.add(layers.Dense(2,activation='relu'))
     reg.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.1))
     #show the network structure 
     reg.summary()
     result=reg.fit(celsius_q,fahrenheit_a,batch_size=1,epochs=1000)
     print('completely training')
-    print(reg.predict([100.0]))
+    print('predict :{}'.format(reg.predict([100.0])))
     print(reg.get_weights())
 
-    export_path='/home/allen/dl_grasp/src/tensorflow_sample/regression/SaveNet'
+    export_path='/home/allen/dl_grasp/src/tensorflow_sample/regression/SaveNet_2'
     reg.save(export_path, save_format='tf')
     print('Show input shape :', reg.input_shape)
 

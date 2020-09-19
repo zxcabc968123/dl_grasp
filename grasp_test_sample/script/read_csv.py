@@ -23,10 +23,10 @@ import pandas as pd
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-file_path = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv"
-
+train_file_path = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv"
+test_file_path  = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data_test.csv"
 def read_csv(csvFile):
-    with open(file_path, newline='') as csvFile:
+    with open(train_file_path, newline='') as csvFile:
 
         rows = csv.reader(csvFile)
 
@@ -50,12 +50,14 @@ def pd_read_csv(csvFile):
 
     return (data1,data2,data3)
 def create_result_array(data2,data3):
-    result_array=np.zeros([len(data2),2],  dtype=float)
-    print(type(result_array))
+
+    result_array=np.zeros([len(data2),2],  dtype=int)
     for i in range(len(data2)):
         result_array[i]=[data2[i],data3[i]]
     return result_array
+
 def create_photo_array(data1):
+
     photo_array= cv2.imread(data1[0],0)
     for i in range(len(data1)-1):
         image=cv2.imread(data1[i+1],0)
@@ -64,10 +66,53 @@ def create_photo_array(data1):
     return photo_array
 
 def main():
-    data1, data2, data3 = pd_read_csv(file_path)
-    result_array=create_result_array(data2,data3)
-    create_photo_array(data1)
-    photo_array=create_photo_array(data1)
+    ####################   train  data_create
+    data1, data2, data3 = pd_read_csv(train_file_path)
+    train_photo_array=create_photo_array(data1)
+    train_result_array=create_result_array(data2,data3)
+    print('photo_array shape: {}'.format(train_photo_array.shape))
+    print('result_array shape: {}'.format(train_result_array.shape))
+    
+    ####################   test   data_create
+    data1, data2, data3 = pd_read_csv(test_file_path)
+    test_photo_array=create_photo_array(data1)
+    test_result_array=create_result_array(data2,data3)
+    print('photo_array shape: {}'.format(test_photo_array.shape))
+    print('result_array shape: {}'.format(test_result_array.shape))
+
+    ###################   Network
+    CNN=keras.Sequential()
+    #add convolution layer filter 32 3*3 activation funtion relu
+    CNN.add(layers.Conv2D(16,(2,2),activation='relu',input_shape=(480,640,1)))
+    #add pooling layer 3*3 
+    CNN.add(layers.MaxPooling2D((3,3)))
+    #add convolution layer filter 16 3*3 activation funtion relu
+    CNN.add(layers.Conv2D(32,(2,2),activation='relu'))
+    #add pooling layer 3*3
+    CNN.add(layers.MaxPooling2D((3,3)))
+    #Flat matrix to enter DNN network
+    CNN.add(layers.Flatten())
+    #deep layer*3
+    CNN.add(layers.Dense(10,activation='relu'))
+    CNN.add(layers.Dense(10,activation='relu'))
+    CNN.add(layers.Dense(10,activation='relu'))
+    CNN.add(layers.Dense(2,activation='relu'))
+    #################### function define
+    CNN.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.01))
+    #show the network structure 
+    CNN.summary()
+    ####################train
+    result=CNN.fit(train_photo_array,train_result_array,batch_size=5,epochs=1000)
+    #print(CNN.predict(test_photo_array[0]))
+    print(train_photo_array[0].shape)
+    print(train_result_array[0])
+    print(train_result_array[0].shape)
+    print('Show input shape :', CNN.input_shape)
+
+
+
+
+
 
 
 if __name__ == "__main__":
