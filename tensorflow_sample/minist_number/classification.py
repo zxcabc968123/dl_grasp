@@ -62,12 +62,12 @@ def main():
     print('Show input shape :', CNN.input_shape)
 
     ################################
-    print(x_test.shape)
-    print(type(x_test))
-    #print(x_test)
-    print(y_test.shape)
-    print(type(y_test))
-    #print(y_test)
+    # print(x_test.shape)
+    # print(type(x_test))
+    # print(x_test)
+    # print(y_test.shape)
+    # print(type(y_test))
+    # print(y_test)
 
 
 if __name__ =="__main__":

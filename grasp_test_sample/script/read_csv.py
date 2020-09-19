@@ -56,14 +56,19 @@ def create_result_array(data2,data3):
         result_array[i]=[data2[i],data3[i]]
     return result_array
 def create_photo_array(data1):
-    
+    photo_array= cv2.imread(data1[0],0)
+    for i in range(len(data1)-1):
+        image=cv2.imread(data1[i+1],0)
+        photo_array=np.concatenate((photo_array,image))
+    photo_array=photo_array.reshape((-1,480,640,1))
+    return photo_array
+
 def main():
     data1, data2, data3 = pd_read_csv(file_path)
     result_array=create_result_array(data2,data3)
-    print(result_array)
+    create_photo_array(data1)
+    photo_array=create_photo_array(data1)
 
-    
-    
-    
+
 if __name__ == "__main__":
     main()
