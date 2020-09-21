@@ -105,10 +105,17 @@ def main():
     ####################train
     result=CNN.fit(train_photo_array,train_result_array,batch_size=2,epochs=5000000)
     #print(CNN.predict(test_photo_array[0]))
+    ####################SaveNet
+    print('save CNN')
+    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200921'
+    CNN.save(export_path, save_format='tf')
     print(train_photo_array[0].shape)
     print(train_result_array[0])
     print(train_result_array[0].shape)
     print('Show input shape :', CNN.input_shape)
+
+    
+    
 
 
 
