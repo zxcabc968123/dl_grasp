@@ -25,20 +25,21 @@ def main():
     reg.add(layers.Dense(1,input_shape=[1]))
     reg.add(layers.Dense(10,input_shape=[1]))
     reg.add(layers.Dense(10,activation='relu'))
-    reg.add(layers.Dense(2,activation='relu'))
-    reg.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.1))
+    #reg.add(layers.Dense(2,activation='relu'))
+    reg.add(layers.Dense(2))
+    reg.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.006))
+    #reg.compile(loss='mean_squared_error', optimizer='sgd')
     #show the network structure 
     reg.summary()
-    result=reg.fit(celsius_q,fahrenheit_a,batch_size=1,epochs=1000)
+    result=reg.fit(celsius_q,fahrenheit_a,batch_size=1,epochs=10000)
     print('completely training')
-    print('predict :{}'.format(reg.predict([100.0])))
     print(reg.get_weights())
 
     export_path='/home/allen/dl_grasp/src/tensorflow_sample/regression/SaveNet_2'
     reg.save(export_path, save_format='tf')
     print('Show input shape :', reg.input_shape)
-
     print(fahrenheit_a[0].shape)
+    print('predict :{}'.format(reg.predict([0])))
 
 if __name__ == "__main__":
     main()

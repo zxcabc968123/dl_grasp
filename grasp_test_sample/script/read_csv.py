@@ -51,7 +51,7 @@ def pd_read_csv(csvFile):
     return (data1,data2,data3)
 def create_result_array(data2,data3):
 
-    result_array=np.zeros([len(data2),2],  dtype=int)
+    result_array=np.zeros([len(data2),2],  dtype=float)
     for i in range(len(data2)):
         result_array[i]=[data2[i],data3[i]]
     return result_array
@@ -96,13 +96,14 @@ def main():
     CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(10,activation='relu'))
-    CNN.add(layers.Dense(2,activation='relu'))
+    CNN.add(layers.Dense(2))
     #################### function define
-    CNN.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.01))
+    CNN.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.006))
+    #CNN.compile(loss='mean_squared_error', optimizer='sgd')
     #show the network structure 
     CNN.summary()
     ####################train
-    result=CNN.fit(train_photo_array,train_result_array,batch_size=5,epochs=1000)
+    result=CNN.fit(train_photo_array,train_result_array,batch_size=2,epochs=5000000)
     #print(CNN.predict(test_photo_array[0]))
     print(train_photo_array[0].shape)
     print(train_result_array[0])
