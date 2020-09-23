@@ -1,0 +1,18 @@
+4 2,2 relu
+POOL 2,2
+8 2,2 relu
+POOL 2,2
+
+DENSE:
+10 relu
+5  relu
+2  
+
+compile:
+loss='mean_squared_logarithmic_error',optimizer=tf.keras.optimizers.Adam(0.0006)
+batch_size=1,epochs=20000
+
+input:(480,640,1) normalize/255
+output: no normalize
+
+

@@ -25,6 +25,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 train_file_path = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv"
 test_file_path  = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data_test.csv"
+EPOCHS=20000
 def read_csv(csvFile):
     with open(train_file_path, newline='') as csvFile:
 
@@ -63,6 +64,8 @@ def create_photo_array(data1):
         image=cv2.imread(data1[i+1],0)
         photo_array=np.concatenate((photo_array,image))
     photo_array=photo_array.reshape((-1,480,640,1))
+    ########normalize
+    photo_array=photo_array/255
     return photo_array
 
 def main():
@@ -83,45 +86,43 @@ def main():
     ###################   Network
     CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(16,(2,2),activation='relu',input_shape=(480,640,1)))
+    CNN.add(layers.Conv2D(4,(2,2),activation='relu',input_shape=(480,640,1)))
     #add pooling layer 3*3 
-    CNN.add(layers.MaxPooling2D((3,3)))
+    CNN.add(layers.MaxPooling2D((2,2)))
     #add convolution layer filter 16 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(32,(2,2),activation='relu'))
+    CNN.add(layers.Conv2D(8,(2,2),activation='relu'))
     #add pooling layer 3*3
-    CNN.add(layers.MaxPooling2D((3,3)))
+    CNN.add(layers.MaxPooling2D((2,2)))
     #Flat matrix to enter DNN network
     CNN.add(layers.Flatten())
     #deep layer*3
     CNN.add(layers.Dense(10,activation='relu'))
-    CNN.add(layers.Dense(10,activation='relu'))
-    CNN.add(layers.Dense(10,activation='relu'))
+    CNN.add(layers.Dense(5,activation='relu'))
+    #CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(2))
     #################### function define
-    CNN.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.006))
+    CNN.compile(loss='mean_squared_logarithmic_error',optimizer=tf.keras.optimizers.Adam(0.0006))
     #CNN.compile(loss='mean_squared_error', optimizer='sgd')
     #show the network structure 
     CNN.summary()
     ####################train
-    result=CNN.fit(train_photo_array,train_result_array,batch_size=2,epochs=5000000)
+    result=CNN.fit(train_photo_array,train_result_array,batch_size=1,epochs=EPOCHS)
     #print(CNN.predict(test_photo_array[0]))
     ####################SaveNet
     print('save CNN')
-    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200921'
+    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200923'
     CNN.save(export_path, save_format='tf')
     print(train_photo_array[0].shape)
     print(train_result_array[0])
     print(train_result_array[0].shape)
     print('Show input shape :', CNN.input_shape)
-
     
-    
-
-
-
-
-
-
+    #################### Loss/epoch
+    loss = result.history['loss']
+    epochs_range = range(EPOCHS)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.savefig('./loss.png')
+    plt.show()
 
 if __name__ == "__main__":
     main()

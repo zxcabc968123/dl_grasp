@@ -18,6 +18,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 celsius_q    = np.array([-40, -10,  0,  8, 15, 22,  38],  dtype=float)
 fahrenheit_a = np.array([[-40,-30],  [14,24], [32,42], [46,56], [59,69], [72,82], [100,110]],  dtype=float)
 
+EPOCHS=100
 def main():
     for i,c in enumerate(celsius_q):
         print('{} is {}'.format(c,fahrenheit_a[i]))
@@ -31,7 +32,7 @@ def main():
     #reg.compile(loss='mean_squared_error', optimizer='sgd')
     #show the network structure 
     reg.summary()
-    result=reg.fit(celsius_q,fahrenheit_a,batch_size=1,epochs=10000)
+    result=reg.fit(celsius_q,fahrenheit_a,batch_size=1,epochs=EPOCHS)
     print('completely training')
     print(reg.get_weights())
 
@@ -40,6 +41,12 @@ def main():
     print('Show input shape :', reg.input_shape)
     print(fahrenheit_a[0].shape)
     print('predict :{}'.format(reg.predict([0])))
+    #################### Loss/epoch
+    loss = result.history['loss']
+    epochs_range = range(EPOCHS)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.savefig('./loss.png')
+    plt.show()
 
 if __name__ == "__main__":
     main()
