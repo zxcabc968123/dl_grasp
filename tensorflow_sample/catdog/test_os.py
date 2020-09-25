@@ -49,7 +49,7 @@ def main():
                                                            class_mode='binary')
     print(len(train_data_gen))
     print(train_data_gen[0][0][0].shape)
-    image=cv2.imread('/home/allen/dl_grasp/src/rs_d435i/pic/depth_test/locate/205.jpg',0)
+    image=cv2.imread('/home/allen/dl_grasp/src/rs_d435i/pic/depth_train/locate/165.jpg',0)
     #image=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     print(image.shape)
     plt.imshow(image,cmap="gray")

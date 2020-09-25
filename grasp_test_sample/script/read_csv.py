@@ -25,7 +25,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 train_file_path = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data.csv"
 test_file_path  = "/home/allen/dl_grasp/src/grasp_test_sample/data/square_data_test.csv"
-EPOCHS=20000
+EPOCHS=50000
 def read_csv(csvFile):
     with open(train_file_path, newline='') as csvFile:
 
@@ -98,10 +98,11 @@ def main():
     #deep layer*3
     CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(5,activation='relu'))
+    CNN.add(layers.Dense(5,activation='relu'))
     #CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(2))
     #################### function define
-    CNN.compile(loss='mean_squared_logarithmic_error',optimizer=tf.keras.optimizers.Adam(0.0006))
+    CNN.compile(loss='mean_absolute_error',optimizer=tf.keras.optimizers.Adam(0.0006))
     #CNN.compile(loss='mean_squared_error', optimizer='sgd')
     #show the network structure 
     CNN.summary()
@@ -110,7 +111,7 @@ def main():
     #print(CNN.predict(test_photo_array[0]))
     ####################SaveNet
     print('save CNN')
-    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200923'
+    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200924'
     CNN.save(export_path, save_format='tf')
     print(train_photo_array[0].shape)
     print(train_result_array[0])
