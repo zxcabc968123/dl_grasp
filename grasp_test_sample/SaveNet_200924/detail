@@ -1,0 +1,23 @@
+4 2,2 relu
+POOL 2,2
+8 2,2 relu
+POOL 2,2
+
+DENSE:
+10 relu
+5  relu
+5  relu
+2  
+
+compile:
+loss='mean_absolute_error',optimizer=tf.keras.optimizers.Adam(0.0006)
+batch_size=1,epochs=20000
+
+input:(480,640,1) normalize/255
+output: no normalize
+
+
+
+#神經元多一點 不管CNN 還是DNN 
+#增加Drop out  l1 l2 normalization
+

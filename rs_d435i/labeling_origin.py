@@ -5,7 +5,6 @@ import numpy as np
 import cv2, os, sys, getopt
 import argparse
 import datetime 
-import math
 
 Generic_location = os.path.abspath(__file__ + "/..")
 print("Generic_location ", Generic_location)
@@ -47,7 +46,6 @@ drawing = False # true if mouse is pressed
 cropped = False
 ix,iy = -1,-1
 rx,ry = -1, -1
-angel = -1
 bboxes_thickness = 2
 bboxes_text_size = 1
 bboxes_text_width = 2
@@ -93,7 +91,7 @@ def rectangle_color(bbox_class):
 
 # Mouse callback function
 def draw(event,x,y,flags,param):
-    global ix, iy, rx, ry, drawing, img, DEFAULT, cropped , pathIMG , angel
+    global ix, iy, rx, ry, drawing, img, DEFAULT, cropped , pathIMG
 
     cropped = False
     
@@ -107,29 +105,20 @@ def draw(event,x,y,flags,param):
         if drawing == True:
             if bboxes != None:
                 for i in range(len(bboxes)):
-                    #cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
-                    cv2.line(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
-            # show rectangle when pull
-            #cv2.rectangle(img,(ix,iy),(x,y), rectangle_color(current_label), bboxes_thickness)
-            cv2.line(img,(ix,iy),(x,y), rectangle_color(current_label), bboxes_thickness)
-            # cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, \
-            #     rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
+                    cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
+            
+            cv2.rectangle(img,(ix,iy),(x,y), rectangle_color(current_label), bboxes_thickness)
+            cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, \
+                rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
             rx, ry = x, y
-            ###calculate angel
-            angel=math.atan2((ry-iy),(rx-ix))*-1
-            #angel=math.atan((bboxes[i][3]-bboxes[i][1])/(bboxes[i][2]-bboxes[i][0]))
-            angel=round(angel/math.pi*180)
             cv2.imshow(pathIMG, img)
 
         else:
             if bboxes != None:
                 for i in range(len(bboxes)):
-                    #
-                    #cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]), bboxes_thickness)
-                    cv2.line(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]), bboxes_thickness)
-                    #################
-                    #cv2.putText(img, str(bboxes[i][4]), (bboxes[i][2] - 25, bboxes[i][3] - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(bboxes[i][4]), bboxes_text_width, cv2.LINE_AA)
-            #cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
+                    cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]), bboxes_thickness)
+                    cv2.putText(img, str(bboxes[i][4]), (bboxes[i][2] - 25, bboxes[i][3] - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(bboxes[i][4]), bboxes_text_width, cv2.LINE_AA)
+            cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
 
             cv2.line(img,(0,y),(img.shape[1], y),(0,0,255),1)
             cv2.line(img,(x,0),(x, img.shape[0]),(0,255,255),1)
@@ -140,18 +129,18 @@ def draw(event,x,y,flags,param):
     elif event == cv2.EVENT_LBUTTONUP:
         rx, ry = x, y 
 
-        # if ix > rx :
-        #     ix, rx = rx, ix
-        # if iy > ry :
-        #     iy, ry = ry , iy
+        if ix > rx :
+            ix, rx = rx, ix
+        if iy > ry :
+            iy, ry = ry , iy
 
-        bboxes.append([ix, iy, rx, ry, current_label,angel])
+        bboxes.append([ix, iy, rx, ry, current_label])
         drawing = False
         
         print("bboxes ", bboxes)
-        # for i in range(len(bboxes)):
-        #     cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]),rectangle_color(bboxes[i][4]),bboxes_thickness)
-        #     cv2.putText(img, str(bboxes[i][4]), (bboxes[i][2] - 25, bboxes[i][3] - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(bboxes[i][4]), bboxes_text_width, cv2.LINE_AA)
+        for i in range(len(bboxes)):
+            cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]),rectangle_color(bboxes[i][4]),bboxes_thickness)
+            cv2.putText(img, str(bboxes[i][4]), (bboxes[i][2] - 25, bboxes[i][3] - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(bboxes[i][4]), bboxes_text_width, cv2.LINE_AA)
 
         cv2.imshow(pathIMG, img)
 
@@ -175,9 +164,8 @@ def WriteRectangle():
     line = ""
     
     for i in range(len(bboxes)):
-        # line = line + ',' + str(bboxes[i][0]) + ',' + str(bboxes[i][1]) + ',' + str(bboxes[i][2]) + 
-        #     ',' + str(bboxes[i][3])
-        line = line + ',' + str(bboxes[i][0]) + ',' + str(bboxes[i][1]) + ',' + str(bboxes[i][5])
+        line = line + ' ' + str(bboxes[i][0]) + ',' + str(bboxes[i][1]) + ',' + str(bboxes[i][2]) + \
+            ',' + str(bboxes[i][3]) + ',' + str(bboxes[i][4])
     line = str(Generic_location + "/" + pathIMG) + line  + '\n'
 
     if not os.path.exists(pathSAV):
