@@ -64,8 +64,8 @@ def main():
     reload_sm_keras.summary()
     for i in range(10):
         get_test_image(data1[i],reload_sm_keras)
-    #for i in range(5):
-        #get_test_image(test_data1[i],reload_sm_keras)
+    # for i in range(5):
+    #     get_test_image(test_data1[i],reload_sm_keras)
     #get_test_image(data1[9],reload_sm_keras)
     
 if __name__ == "__main__":
