@@ -68,6 +68,5 @@ def main():
         #get_test_image(test_data1[i],reload_sm_keras)
     #get_test_image(data1[9],reload_sm_keras)
     
-    
 if __name__ == "__main__":
     main()
