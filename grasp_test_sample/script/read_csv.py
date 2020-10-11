@@ -86,19 +86,19 @@ def main():
     ###################   Network
     CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(4,(2,2),activation='relu',input_shape=(480,640,1)))
+    CNN.add(layers.Conv2D(32,(2,2),activation='relu',input_shape=(480,640,1)))
     #add pooling layer 3*3 
     CNN.add(layers.MaxPooling2D((2,2)))
     #add convolution layer filter 16 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(8,(2,2),activation='relu'))
+    CNN.add(layers.Conv2D(64,(2,2),activation='relu'))
     #add pooling layer 3*3
     CNN.add(layers.MaxPooling2D((2,2)))
     #Flat matrix to enter DNN network
     CNN.add(layers.Flatten())
     #deep layer*3
-    CNN.add(layers.Dense(10,activation='relu'))
-    CNN.add(layers.Dense(5,activation='relu'))
-    CNN.add(layers.Dense(5,activation='relu'))
+    CNN.add(layers.Dense(30,activation='relu'))
+    CNN.add(layers.Dense(15,activation='relu'))
+    CNN.add(layers.Dense(15,activation='relu'))
     #CNN.add(layers.Dense(10,activation='relu'))
     CNN.add(layers.Dense(2))
     #################### function define
@@ -111,7 +111,7 @@ def main():
     #print(CNN.predict(test_photo_array[0]))
     ####################SaveNet
     print('save CNN')
-    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_200924'
+    export_path='/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_201006'
     CNN.save(export_path, save_format='tf')
     print(train_photo_array[0].shape)
     print(train_result_array[0])
@@ -123,6 +123,7 @@ def main():
     epochs_range = range(EPOCHS)
     plt.plot(epochs_range, loss, label='Training Loss')
     plt.savefig('./loss.png')
+    plt.savefig('/home/allen/dl_grasp/src/grasp_test_sample/SaveNet_201006/loss.png')
     plt.show()
 
 if __name__ == "__main__":

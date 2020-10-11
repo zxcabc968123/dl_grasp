@@ -109,9 +109,15 @@ def draw(event,x,y,flags,param):
                 for i in range(len(bboxes)):
                     #cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
                     cv2.line(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
+                    tmp_x=bboxes[i][2]-bboxes[i][0]
+                    tmp_y=bboxes[i][3]-bboxes[i][1]
+                    cv2.line(img,(bboxes[i][0]-tmp_x,bboxes[i][1]-tmp_y),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
             # show rectangle when pull
             #cv2.rectangle(img,(ix,iy),(x,y), rectangle_color(current_label), bboxes_thickness)
             cv2.line(img,(ix,iy),(x,y), rectangle_color(current_label), bboxes_thickness)
+            tmp_x=x-ix
+            tmp_y=y-iy
+            cv2.line(img,(ix-tmp_x,iy-tmp_y),(x,y), rectangle_color(current_label), bboxes_thickness)
             # cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, \
             #     rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
             rx, ry = x, y
@@ -127,13 +133,16 @@ def draw(event,x,y,flags,param):
                     #
                     #cv2.rectangle(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]), bboxes_thickness)
                     cv2.line(img,(bboxes[i][0],bboxes[i][1]),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]), bboxes_thickness)
+                    tmp_x=bboxes[i][2]-bboxes[i][0]
+                    tmp_y=bboxes[i][3]-bboxes[i][1]
+                    cv2.line(img,(bboxes[i][0]-tmp_x,bboxes[i][1]-tmp_y),(bboxes[i][2],bboxes[i][3]), rectangle_color(bboxes[i][4]),bboxes_thickness)
                     #################
                     #cv2.putText(img, str(bboxes[i][4]), (bboxes[i][2] - 25, bboxes[i][3] - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(bboxes[i][4]), bboxes_text_width, cv2.LINE_AA)
             #cv2.putText(img, str(current_label), (x - 25, y - 10), cv2.FONT_HERSHEY_SIMPLEX, bboxes_text_size, rectangle_color(current_label), bboxes_text_width, cv2.LINE_AA)
 
-            cv2.line(img,(0,y),(img.shape[1], y),(0,0,255),1)
-            cv2.line(img,(x,0),(x, img.shape[0]),(0,255,255),1)
-            cv2.imshow(pathIMG, img)
+            cv2.line(img,(0,y),(img.shape[1], y),(0,255,255),1)
+            cv2.line(img,(x,0),(x, img.shape[0]),(0,255,0),1)
+            cv2.circle(img, (x, y), 10, (0,0,255))
 
         # pass
 

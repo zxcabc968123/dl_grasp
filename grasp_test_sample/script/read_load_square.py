@@ -54,8 +54,7 @@ def get_test_image(image_path,reload_sm_keras):
     cv2.circle(image, (result_point[0][0],result_point[0][1]),5,  (0, 0, 255),2)
     ###
     cv2.imshow('My Image', image)
-    print(type(result_point))
-    print(result_point)
+    print(image)
     print('prdict locate : x: {}  y: {}'.format(result_point[0][0],result_point[0][1]))
     cv2.waitKey(0)
 def main():
@@ -63,10 +62,10 @@ def main():
     test_data1, test_data2, test_data3 = pd_read_csv(test_file_path)
     reload_sm_keras = tf.keras.models.load_model(export_path)
     reload_sm_keras.summary()
-    # for i in range(10):
-    #     get_test_image(data1[i],reload_sm_keras)
-    for i in range(5):
-        get_test_image(test_data1[i],reload_sm_keras)
+    for i in range(10):
+        get_test_image(data1[i],reload_sm_keras)
+    #for i in range(5):
+        #get_test_image(test_data1[i],reload_sm_keras)
     #get_test_image(data1[9],reload_sm_keras)
     
     
