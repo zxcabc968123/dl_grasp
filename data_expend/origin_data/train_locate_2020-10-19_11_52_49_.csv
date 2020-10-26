@@ -1,4 +1,4 @@
-image_path,target_x,target_y,target_angle,ix,iy,width,high
+image_path,target_x,target_y,target_angle,ix,width,high
 /home/allen/dl_grasp/src/data_expend/origin_img/141.jpg,308,156,0,263,114,353,198
 /home/allen/dl_grasp/src/data_expend/origin_img/99.jpg,351,131,54,303,81,399,181
 /home/allen/dl_grasp/src/data_expend/origin_img/197.jpg,108,277,59,56,221,160,333

@@ -225,7 +225,7 @@ def WriteRectangle():
     if not os.path.exists(pathSAV):
         os.makedirs(pathSAV)
 
-    with open(pathSAV + 'train_locate' + "_" + current_time + '.txt', 'a') as f:
+    with open(pathSAV + 'train_locate' + "_" + current_time + '.csv', 'a') as f:
         f.writelines(line)
 
 # Main Loop

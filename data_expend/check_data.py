@@ -40,8 +40,8 @@ def pd_read_csv(csvFile):
         data4.append(data_row["target_angle"])
         data5.append(data_row["ix"])
         data6.append(data_row["iy"])
-        data7.append(data_row["width"])
-        data8.append(data_row["high"])
+        data7.append(data_row["rx"])
+        data8.append(data_row["ry"])
     return (data1,data2,data3,data4,data5,data6,data7,data8)
 
 def trans_degree(x,y,degree):
