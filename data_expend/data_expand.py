@@ -15,12 +15,15 @@ import random as rand
 
 origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
 expand_folder = '/home/allen/dl_grasp/src/data_expend/expand_data'
+
+
 def rotate_image(roi,origin_degree):
     degree=rand.randint(0,360)
+    size=rand.uniform(0.5,1.5)
     print('degree : {}'.format(degree))
     (h, w) = roi.shape[:2]
     (cX, cY) = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D((cX, cY), degree, 2)
+    M = cv2.getRotationMatrix2D((cX, cY), degree,size )
 
     cos = np.abs(M[0, 0])
     sin = np.abs(M[0, 1])
@@ -30,15 +33,20 @@ def rotate_image(roi,origin_degree):
     M[0, 2] += (nW / 2) - cX
     M[1, 2] += (nH / 2) - cY
 
-    roi =cv2.warpAffine(roi, M, (nW, nH))
-    cv2.imshow('rotate_img_1',roi)
+    roi =cv2.warpAffine(roi, M, (nW, nH), flags=cv2.INTER_NEAREST,borderValue=3)
+    #cv2.imshow('rotate_img_1',roi)
     (h, w) = roi.shape[:2]
     for i in range(h):
         for j in range(w):
             if roi[i][j]<=10:
                 roi[i][j]=rand.randint(243,245)
     cv2.imshow('rotate_img_2',roi)
+    #####Dilation 
+    kernel = np.ones((3,3), np.uint8)
+    roi = cv2.erode(roi, kernel, iterations = 3)
+    cv2.imshow('rotate_img_3',roi)
     cv2.waitKey(0)
+
     return roi
 
 def load_background():
@@ -72,18 +80,19 @@ def pd_read_csv(csvFile):
 def main():
     image_path,target_x,target_y,target_angle,ix,iy,rx,ry=pd_read_csv(origin_data_csv)
     image=cv2.imread(image_path[0],0)
+    cv2.imshow('origin_image',image)
     cut_image=image[iy[0]:ry[0],ix[0]:rx[0]]
     h_img=ry[0]-iy[0]
     w_img=rx[0]-ix[0]
     print('h_img:{} w_img:{}'.format(h_img,w_img))
-    cv2.imshow('cut_image',cut_image)
+    #cv2.imshow('cut_image',cut_image)
     rotate_img=rotate_image(cut_image,target_angle[0])
     (h_img, w_img) = rotate_img.shape[:2]
     cv2.imshow('rotate_image',rotate_img)
     background_img_path=load_background()
     print(background_img_path) 
     background_img=cv2.imread(background_img_path,0)
-    cv2.imshow('background_image',background_img)
+    #cv2.imshow('background_image',background_img)
     new_ix=rand.randint(0,640-w_img)
     new_iy=rand.randint(0,480-h_img)
     background_img[new_iy:new_iy+h_img,new_ix:new_ix+w_img]=rotate_img
