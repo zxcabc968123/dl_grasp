@@ -12,13 +12,44 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import pandas as pd
 import random as rand
+import datetime 
+import argparse 
+day = str(datetime.datetime.now()).split(" ")[0]
+time = str(datetime.datetime.now()).split(" ")[1]
+time = time.split(":")[0] + "_" + time.split(":")[1] + "_" + time.split(":")[2].split(".")[0]
 
+current_time = day + "_" + time + "_"
+####save
+expand_data_path = "/home/allen/dl_grasp/src/data_expend/expand_data/"
+expand_img_path = "/home/allen/dl_grasp/src/data_expend/expand_img/"
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--expand_time', type=int,help='expand times of each data')
+FLAGS = parser.parse_args()
+
+expands_times = FLAGS.expand_time
+#######################################################################################################
+                                            #origin_data_csv
 origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
-expand_folder = '/home/allen/dl_grasp/src/data_expend/expand_data'
+
+########################################################################################################
+def save_information(fin_img,fin_x,fin_y,fin_degree):
+    dirs = os.listdir(expand_img_path)
+    img_num = len(dirs)
+    img_path = expand_img_path + 'data_'+str(img_num+1) + '.jpg'
+    cv2.imwrite(img_path,fin_img)
+    line =img_path + ',' + str(fin_x) + ',' + str(fin_y) + ','+ str(fin_degree)+ '\n'
+
+    if not os.path.exists(expand_data_path):
+        os.makedirs(expand_data_path)            
+    with open(expand_data_path + 'data' + "_" + current_time + '.csv', 'a') as f:
+        f.writelines(line)
+        print('Save data : {}'.format(img_num+1))
 
 ###range: 0.9~1.1
 def stretch_img(roi):
-    size=rand.uniform(0.9,1.05)
+    size=rand.uniform(0.9,1)
     (h, w) = roi.shape[:2]
     for i in range(h):
         for j in range(w):
@@ -29,14 +60,13 @@ def stretch_img(roi):
 def rotate_image(roi,origin_degree): 
     degree=rand.randint(0,360)
     ###adjust grasp degree###
-    degree=111
     new_grasp_degree=origin_degree+degree
     if new_grasp_degree>=360:
         new_grasp_degree=new_grasp_degree-360
     if  new_grasp_degree>=180:
         new_grasp_degree=new_grasp_degree-180
-    size=rand.uniform(0.5,1.5)
-    print('rotating_degree : {}'.format(degree))
+    size=rand.uniform(0.7,1.2)
+    #print('rotating_degree : {}'.format(degree))
     (h, w) = roi.shape[:2]
     (cX, cY) = (w // 2, h // 2)
     M = cv2.getRotationMatrix2D((cX, cY), degree,size )
@@ -97,25 +127,25 @@ def slide_img(roi):
     new_iy=rand.randint(0,480-h_img)
     background_img=load_background()
     background_img[new_iy:new_iy+h_img,new_ix:new_ix+w_img]=roi
-    return background_img
+    fin_x = new_ix+0.5*w_img
+    fin_y = new_iy+0.5*h_img
+    return background_img,fin_x,fin_y
     
 def main():
     image_path,target_x,target_y,target_angle,ix,iy,rx,ry=pd_read_csv(origin_data_csv)
-    #######
-    image=cv2.imread(image_path[1],0)
-    cv2.imshow('origin_image',image)
-    cut_image=image[iy[1]:ry[1],ix[1]:rx[1]]
-    h_img=ry[1]-iy[1]
-    w_img=rx[1]-ix[1]
-    print('h_img:{} w_img:{}'.format(h_img,w_img))
-    cv2.imshow('cut_image',cut_image)
-    print('target_degree : {}'.format(target_angle[1]))
-    (rotate_img,new_grasp_degree)=rotate_image(cut_image,target_angle[1])
-    new_img=stretch_img(rotate_img)
-    print('new grasp degree : {}'.format(new_grasp_degree))
-    fin_img=slide_img(new_img)
-    cv2.imshow('fin_img',fin_img)
-    cv2.waitKey(0)
+    for i in range (len(image_path)):
+        image=cv2.imread(image_path[i],0)
+        for j in range(expands_times):     
+            cut_image=image[iy[i]:ry[i],ix[i]:rx[i]]
+            h_img=ry[i]-iy[i]
+            w_img=rx[i]-ix[i]
+            (rotate_img,new_grasp_degree)=rotate_image(cut_image,target_angle[i])
+            new_img=stretch_img(rotate_img)
+            (fin_img,fin_x,fin_y)=slide_img(new_img)
+            #print('new grasp x:{} y:{} degree : {}'.format(fin_x,fin_y,new_grasp_degree))
+            ###save
+            save_information(fin_img,fin_x,fin_y,new_grasp_degree)
+
 
 
 if __name__ == "__main__":
