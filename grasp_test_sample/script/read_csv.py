@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
@@ -107,7 +107,7 @@ def main():
     #show the network structure 
     CNN.summary()
     ####################train
-    result=CNN.fit(train_photo_array,train_result_array,batch_size=1,epochs=EPOCHS)
+    result=CNN.fit(train_photo_array,train_result_array,batch_size=10,epochs=EPOCHS)
     #print(CNN.predict(test_photo_array[0]))
     ####################SaveNet
     print('save CNN')

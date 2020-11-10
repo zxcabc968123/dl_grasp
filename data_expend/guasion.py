@@ -44,8 +44,10 @@ def add_gaussian_noise(image_in, noise_sigma):
     return noisy_image
 if __name__ == "__main__":
     img_path = '/home/allen/dl_grasp/src/data_expend/origin_img/img/blackbox/blackbox_1.jpg' 
+
     img = cv2.imread(img_path,0) 
-    noise_sigma =  15
+    cv2.imwrite('sourse.jpg',img)
+    noise_sigma =  0
     noise_img = add_gaussian_noise(img, noise_sigma=noise_sigma) 
     noise_path = 'noise_{}.jpg'.format(noise_sigma) 
     cv2.imwrite(noise_path, noise_img) 

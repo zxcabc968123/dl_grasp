@@ -61,7 +61,7 @@ def rotate_image(roi,origin_degree):
     degree=rand.randint(0,360)
     ###adjust grasp degree###
     new_grasp_degree=origin_degree+degree
-    if new_grasp_degree>=360:
+    if  new_grasp_degree>=360:
         new_grasp_degree=new_grasp_degree-360
     if  new_grasp_degree>=180:
         new_grasp_degree=new_grasp_degree-180
