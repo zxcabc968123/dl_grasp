@@ -162,10 +162,16 @@ def main():
         difference[1] += abs(data3[i]-(predict_point[0][1]))
         ###########calculate arctan#########
         predict_degree=arctan_recovery(predict_point[0][2],predict_point[0][3])
+        predict_degree_array = np.array([predict_degree , 0.0])
+        if predict_degree>=0:
+            predict_degree_array=np.array([predict_degree,predict_degree-180])
+        elif predict_degree<0:
+            predict_degree_array=np.array([predict_degree,predict_degree+180])
         #############################
         difference[2] += abs(data4[i]-predict_degree)
 
-        if (abs(data2[i]-predict_point[0][0])<=x_locate_range )&(abs(data3[i]-predict_point[0][1])<=y_locate_range)&(abs(data4[i]-predict_degree)<=angle_range):
+        if (abs(data2[i]-predict_point[0][0])<=x_locate_range )&(abs(data3[i]-predict_point[0][1])<=y_locate_range)&\
+            ((abs(data4[i]-predict_degree_array[0])<=angle_range)or(abs(data4[i]-predict_degree_array[1])<=angle_range)):
             accurate_num=accurate_num+1
     print('accurate_num : {}'.format(accurate_num/len(validation_input)*100))
     print('x_mae : {}'.format(difference[0]/len(validation_input)))

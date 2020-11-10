@@ -31,7 +31,7 @@ FLAGS = parser.parse_args()
 expands_times = FLAGS.expand_time
 #######################################################################################################
                                             #origin_data_csv
-origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
+origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/1111_bottle_small_bottle_blackbox_square/object_1111.csv'
 
 ########################################################################################################
 def save_information(fin_img,fin_x,fin_y,fin_degree):
@@ -53,7 +53,7 @@ def stretch_img(roi):
     (h, w) = roi.shape[:2]
     for i in range(h):
         for j in range(w):
-            if not (roi[i][j]>230):
+            if not (roi[i][j]>235):
                 roi[i][j]=roi[i][j]*size
     return roi
 ###range: 0~360
@@ -89,7 +89,11 @@ def rotate_image(roi,origin_degree):
     #####Dilation 
     kernel = np.ones((3,3), np.uint8)
     roi = cv2.erode(roi, kernel, iterations = 3)
-
+    #####size limit
+    (h_img, w_img) = roi.shape[:2]
+    if h_img>= 480 or w_img>=640:
+        size = max(h_img/480,w_img/640)
+        roi = cv2.resize(roi, (0, 0), fx=1/size, fy=1/size,interpolation=cv2.INTER_NEAREST)
     return roi,new_grasp_degree
 
 def load_background():
@@ -123,6 +127,7 @@ def pd_read_csv(csvFile):
     return (data1,data2,data3,data4,data5,data6,data7,data8)
 def slide_img(roi):
     (h_img, w_img) = roi.shape[:2]
+    #print(h_img,w_img)
     new_ix=rand.randint(0,640-w_img)
     new_iy=rand.randint(0,480-h_img)
     background_img=load_background()
