@@ -30,13 +30,13 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_dropout10_2degreev3'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_2degree_1-1batchnormalize'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15
-x_locate_range = 20
-y_locate_range = 20
+x_locate_range = 30
+y_locate_range = 30
 
 def custom_loss(y_actual,y_pred):
     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
@@ -46,8 +46,7 @@ def custom_loss(y_actual,y_pred):
 
     loss = x_gap + y_gap + 1.5*cos_gap + 1.5*sin_gap
 
-    #return tf.math.sqrt(tf.math.reduce_mean(loss))
-    return tf.math.reduce_sum(loss)
+    return tf.math.sqrt(tf.math.reduce_mean(loss))
     
 def arctan_recovery(cos_x,sin_x):
     #print('cos_x : {},sin_x : {} '.format(cos_x,sin_x))
@@ -66,7 +65,7 @@ def create_result_array(data2,data3,data4):
         diameter = data4[i]*math.pi/180
         cos_pi = math.cos(2*diameter)
         sin_pi = math.sin(2*diameter)
-        result_array[i]=[data2[i]/640,data3[i]/480,cos_pi,sin_pi]
+        result_array[i]=[data2[i]/320,data3[i]/240,cos_pi,sin_pi]
         print('cos : {} sin : {}'.format(cos_pi,sin_pi))
     return result_array
 
@@ -107,7 +106,10 @@ def pd_read_csv(csvFile):
         data2.append(data_row["target_x"])
         data3.append(data_row["target_y"])
         data4.append(data_row["target_angle"])
-
+    #######0 1  ----  -1 1########
+    for i in range(len(data2)):
+        data2[i] = data2[i]-320
+        data3[i] = data2[i]-240
     for i in range(len(data4)):
          #######################
         if data4[i]>90:
@@ -155,8 +157,8 @@ def main():
         ##########predict time#######
         t0 = time.time()
         predict_point=reload_sm_keras.predict([temp_input])
-        predict_point[0][0]=predict_point[0][0]*640
-        predict_point[0][1]=predict_point[0][1]*480
+        predict_point[0][0]=predict_point[0][0]*320
+        predict_point[0][1]=predict_point[0][1]*240
         pre_time += (time.time() - t0)
         #############################
         difference[0] += abs(data2[i]-(predict_point[0][0]))

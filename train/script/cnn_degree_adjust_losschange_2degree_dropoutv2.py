@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=5500)])
+tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D ,BatchNormalization
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.losses import mean_squared_error, binary_crossentropy
 import tensorflow.keras.backend as kb
-from solve_cudnn_error import *
 
 lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 
@@ -29,26 +28,10 @@ import math
 
 train_file_path = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 test_file_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_2degree_batchnormalize'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_dropout10_2degreev2'
 Batch_size = 10
 EPOCHS = 500
 
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
-
-config = ConfigProto()
-config.gpu_options.allow_growth = True
-session = InteractiveSession(config=config)
-
-# def custom_loss(y_actual,y_pred):
-#     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
-#     y_gap = tf.square(y_pred[:,1]-y_actual[:,1])
-#     cos_gap = tf.square(y_pred[:,2]-y_actual[:,2])
-#     sin_gap = tf.square(y_pred[:,3]-y_actual[:,3])
-
-#     loss = x_gap + y_gap + 1.5*cos_gap + 1.5*sin_gap
-
-#     return tf.math.sqrt(tf.math.reduce_mean(loss))
 
 def custom_loss(y_actual,y_pred):
     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
@@ -58,7 +41,8 @@ def custom_loss(y_actual,y_pred):
 
     loss = x_gap + y_gap + 1.5*cos_gap + 1.5*sin_gap
 
-    return tf.math.reduce_mean(loss)
+    return tf.math.reduce_sum(loss)
+
 
 
 def pd_read_csv(csvFile):
@@ -125,53 +109,38 @@ def main():
     ###################   Network
     CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(64,(2,2),input_shape=(480,640,1)))
-    CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
+    CNN.add(layers.Conv2D(64,(2,2),activation=lrelu,input_shape=(480,640,1)))
+    #add pooling layer 3*3 
+    CNN.add(layers.MaxPooling2D((2,2)))
+    #add convolution layer filter 16 3*3 activation funtion relu
+    CNN.add(layers.Conv2D(64,(2,2),activation=lrelu))
+    #add pooling layer 3*3
     CNN.add(layers.MaxPooling2D((2,2)))
 
-    CNN.add(layers.Conv2D(32,(2,2),strides=(2, 2)))
-    CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
+    CNN.add(layers.Conv2D(32,(2,2),activation=lrelu))
+    CNN.add(layers.MaxPooling2D((2,2)))
+    CNN.add(layers.Conv2D(16,(2,2),activation=lrelu))
+    CNN.add(layers.MaxPooling2D((2,2)))
+    CNN.add(layers.Conv2D(16,(2,2),activation=lrelu))
+    
+
     CNN.add(layers.MaxPooling2D((2,2)))
 
-    CNN.add(layers.Conv2D(32,(2,2),strides=(2, 2)))
-    CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
-    CNN.add(layers.MaxPooling2D((2,2)))
-
-    #########################
-    CNN.add(layers.Conv2D(32,(2,2),strides=(2, 2)))
-    #CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
-    CNN.add(layers.Conv2D(32,(2,2),strides=(2, 2)))
-    #CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
-    CNN.add(layers.Conv2D(32,(2,2),strides=(1, 1)))
-    #CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
-    CNN.add(layers.MaxPooling2D((2,2)))
-    ########################
-    #####Dropout
-    #CNN.add(layers.Dropout(0.5))
+    
+    
     CNN.add(layers.Flatten())
-   
-    #CNN.add(layers.Dropout(0.5))
-    CNN.add(layers.Dense(64))
-    #CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
     
+    #####Dropout
+    CNN.add(layers.Dropout(0.5))
+    CNN.add(layers.Dense(64,activation=lrelu))
 
-    #CNN.add(layers.Dropout(0.5))
-    CNN.add(layers.Dense(32))
-    #CNN.add(layers.BatchNormalization())
-    CNN.add(layers.Activation(lrelu))
-    
 
-    #CNN.add(layers.Dropout(0.5))
-    CNN.add(layers.Dense(16))
-    
-    CNN.add(layers.Activation(lrelu))
+    CNN.add(layers.Dense(64,activation=lrelu))
+
+
+    CNN.add(layers.Dense(32,activation=lrelu))
+
+    CNN.add(layers.Dense(32,activation=lrelu))
 
     #CNN.add(layers.Dense(4))
     CNN.add(layers.Dense(4))

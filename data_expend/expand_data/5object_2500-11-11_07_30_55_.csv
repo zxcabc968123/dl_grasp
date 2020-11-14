@@ -1,3 +1,4 @@
+image_path,target_x,target_y,target_angle
 /home/allen/dl_grasp/src/data_expend/expand_img/data_1041.jpg,291.5,240.0,30
 /home/allen/dl_grasp/src/data_expend/expand_img/data_1042.jpg,295.5,269.0,161
 /home/allen/dl_grasp/src/data_expend/expand_img/data_1043.jpg,459.5,240.0,161
