@@ -31,8 +31,8 @@ FLAGS = parser.parse_args()
 expands_times = FLAGS.expand_time
 #######################################################################################################
                                             #origin_data_csv
-origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/1111_bottle_small_bottle_blackbox_square/object_1111.csv'
-
+#origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/1111_bottle_small_bottle_blackbox_square/object_1111.csv'
+origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
 ########################################################################################################
 def save_information(fin_img,fin_x,fin_y,fin_degree):
     dirs = os.listdir(expand_img_path)

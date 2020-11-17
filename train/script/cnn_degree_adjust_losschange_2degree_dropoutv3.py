@@ -30,14 +30,14 @@ import math
 
 train_file_path = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 test_file_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_dropout10_2degreev3_500ep'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_dropout10_2degreev3_500ep_minivalloss'
 Batch_size = 10
 EPOCHS = 500
 
 custom_early_stopping = EarlyStopping(
     monitor='val_loss', 
-    patience=10, 
-    min_delta=0.08, 
+    patience=50, 
+    min_delta=0.005, 
     mode='min'
 )
 
@@ -47,7 +47,7 @@ def custom_loss(y_actual,y_pred):
     cos_gap = tf.square(y_pred[:,2]-y_actual[:,2])
     sin_gap =  tf.square(y_pred[:,3]-y_actual[:,3])
 
-    loss = x_gap + y_gap + 1.5*cos_gap + 1.5*sin_gap
+    loss = x_gap + y_gap + 1.2*cos_gap + 1.2*sin_gap
 
     return tf.math.reduce_sum(loss)
 
@@ -146,9 +146,9 @@ def main():
     CNN.add(layers.Dense(64,activation=lrelu))
 
 
-    CNN.add(layers.Dense(64,activation=lrelu))
+    CNN.add(layers.Dense(32,activation=lrelu))
 
-    CNN.add(layers.Dense(64,activation=lrelu))
+    CNN.add(layers.Dense(32,activation=lrelu))
 
     #CNN.add(layers.Dense(4))
     CNN.add(layers.Dense(4))

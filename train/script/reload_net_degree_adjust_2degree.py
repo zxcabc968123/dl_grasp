@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4500)])
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
@@ -30,13 +30,14 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/oneobject/CNN_MSE201108_adjustdegree_normalize_nodrop_losschange_dropout10_2degreev3'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/fiveobject/1117_dropoutv4'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
+data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_100_2020-11-11_07_50_16_.csv'
+#data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15
-x_locate_range = 20
-y_locate_range = 20
+x_locate_range = 30
+y_locate_range = 30
 
 def custom_loss(y_actual,y_pred):
     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
@@ -174,6 +175,7 @@ def main():
         if (abs(data2[i]-predict_point[0][0])<=x_locate_range )&(abs(data3[i]-predict_point[0][1])<=y_locate_range)&\
             ((abs(data4[i]-predict_degree_array[0])<=angle_range)or(abs(data4[i]-predict_degree_array[1])<=angle_range)):
             accurate_num=accurate_num+1
+    print('limit : x: {} y: {} angle: {}'.format(x_locate_range,y_locate_range,angle_range))
     print('accurate_num : {}'.format(accurate_num/len(validation_input)*100))
     print('x_mae : {}'.format(difference[0]/len(validation_input)))
     print('y_mae : {}'.format(difference[1]/len(validation_input)))
