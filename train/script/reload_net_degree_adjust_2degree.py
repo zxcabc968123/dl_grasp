@@ -32,7 +32,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
 net_path = '/home/allen/dl_grasp/src/train/Save_net/fiveobject/1117_dropoutv4'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_100_2020-11-11_07_50_16_.csv'
+data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_80_2020-11-18_07_50_16.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15

@@ -2,11 +2,11 @@
 from my_classes import *
 
 lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
-data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_2500-11-11_07_30_55_.csv'
-test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_100_2020-11-11_07_50_16_.csv'
+data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_2000-11-18_07_30_55.csv'
+test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_80_2020-11-18_07_50_16.csv'
 #data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/fiveobject/1117_dropoutv4'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/fourobject/1118_fourobject_dropoutv4'
 EPOCHS = 1000
 batch_size = 10
 

@@ -1,3 +1,4 @@
+image_path,target_x,target_y,target_angle,ix,iy,rx,ry
 /home/allen/dl_grasp/src/data_expend/origin_img/img/square/square_12.jpg,347,248,45,285,194,409,302
 /home/allen/dl_grasp/src/data_expend/origin_img/img/square/square_10.jpg,259,329,9,197,283,321,375
 /home/allen/dl_grasp/src/data_expend/origin_img/img/square/square_5.jpg,126,155,82,54,105,198,205

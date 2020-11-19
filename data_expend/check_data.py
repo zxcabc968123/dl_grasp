@@ -55,6 +55,7 @@ def trans_degree(x,y,degree):
     
 def main():
     data1,data2,data3,data4,data5,data6,data7,data8=pd_read_csv(data_csv)
+    print('total data num :',len(data1))
     for i in range(len(data1)):
         print('Img :'+data1[i])
         print('target_x : {} terget_y : {}'.format(data2[i],data3[i]))
