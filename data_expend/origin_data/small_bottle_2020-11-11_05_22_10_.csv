@@ -1,3 +1,4 @@
+image_path,target_x,target_y,target_angle,ix,iy,rx,ry
 /home/allen/dl_grasp/src/data_expend/origin_img/img/small_bottle/small_bottle_13.jpg,253,155,126,175,114,331,196
 /home/allen/dl_grasp/src/data_expend/origin_img/img/small_bottle/small_bottle_7.jpg,395,182,76,327,142,463,222
 /home/allen/dl_grasp/src/data_expend/origin_img/img/small_bottle/small_bottle_3.jpg,355,145,43,289,90,421,200

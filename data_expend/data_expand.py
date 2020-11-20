@@ -32,7 +32,8 @@ expands_times = FLAGS.expand_time
 #######################################################################################################
                                             #origin_data_csv
 #origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/1111_bottle_small_bottle_blackbox_square/object_1111.csv'
-origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
+#origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/blackbox_2020-10-23_15_08_17_.csv'
+origin_data_csv = '/home/allen/dl_grasp/src/data_expend/origin_data/1119_14object/14_object_num20_1119.csv'
 ########################################################################################################
 def save_information(fin_img,fin_x,fin_y,fin_degree):
     dirs = os.listdir(expand_img_path)
@@ -53,7 +54,7 @@ def stretch_img(roi):
     (h, w) = roi.shape[:2]
     for i in range(h):
         for j in range(w):
-            if not (roi[i][j]>235):
+            if not (roi[i][j]>240):
                 roi[i][j]=roi[i][j]*size
     return roi
 ###range: 0~360
@@ -84,11 +85,14 @@ def rotate_image(roi,origin_degree):
     (h, w) = roi.shape[:2]
     for i in range(h):
         for j in range(w):
-            if roi[i][j]<=10:
+            if roi[i][j]<=80:
                 roi[i][j]=rand.randint(243,245)
-    #####Dilation 
+    #####erode
     kernel = np.ones((3,3), np.uint8)
-    roi = cv2.erode(roi, kernel, iterations = 3)
+    roi = cv2.dilate(roi, kernel, iterations = 1)
+    #####Dilation 
+    kernel = np.ones((5,5), np.uint8)
+    roi = cv2.erode(roi, kernel, iterations = 1)
     #####size limit
     (h_img, w_img) = roi.shape[:2]
     if h_img>= 480 or w_img>=640:

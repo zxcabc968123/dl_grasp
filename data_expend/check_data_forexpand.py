@@ -17,7 +17,7 @@ import math
 # parser = argparse.ArgumentParser()
 # parser.add_argument('--TrainDIR', type=str, default='', help='path to Trainingdata')
 # FLAGS = parser.parse_args()
-data_csv='/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
+data_csv='/home/allen/dl_grasp/src/data_expend/expand_data/data_2020-11-20_05_04_21_.csv'
 
 def pd_read_csv(csvFile):
  

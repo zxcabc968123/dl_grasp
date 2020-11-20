@@ -30,9 +30,9 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/fiveobject/1117_dropoutv4'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
-data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_80_2020-11-18_07_50_16.csv'
+data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15
@@ -45,7 +45,7 @@ def custom_loss(y_actual,y_pred):
     cos_gap = tf.square(y_pred[:,2]-y_actual[:,2])
     sin_gap =  tf.square(y_pred[:,3]-y_actual[:,3])
 
-    loss = x_gap + y_gap + 1.5*cos_gap + 1.5*sin_gap
+    loss = 1.2*x_gap + 1.2*y_gap + cos_gap + sin_gap
 
     #return tf.math.sqrt(tf.math.reduce_mean(loss))
     return tf.math.reduce_sum(loss)
