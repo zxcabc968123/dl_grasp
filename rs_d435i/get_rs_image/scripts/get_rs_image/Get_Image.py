@@ -32,8 +32,8 @@ class Get_image():
 
         #rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
 
-        self.cv_image = None
-        self.cv_depth = None
+        self.cv_image = np.ndarray
+        self.cv_depth = np.ndarray
         self.display_mode = 'rgb'
         self.display_mode = 'depth'
 
@@ -73,7 +73,7 @@ class Get_image():
                 tmp=cv2.dilate(tmp,kernel,iterations = 8)
                 tmp=cv2.erode(tmp,kernel,iterations = 2)
                 ###
-                self.cv_depth = cv2.applyColorMap(cv2.convertScaleAbs(tmp, alpha=0.425), cv2.COLORMAP_BONE)
+                self.cv_depth = cv2.applyColorMap(cv2.convertScaleAbs(tmp, alpha=0.5666), cv2.COLORMAP_BONE)
                 #self.cv_depth = cv2.cvtColor(tmp, cv2.COLOR)
                 #self.cv_depth = cv2.applyColorMap(tmp, cv2.COLORMAP_JET)
             else:

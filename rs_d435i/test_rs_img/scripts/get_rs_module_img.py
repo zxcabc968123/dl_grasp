@@ -10,7 +10,7 @@ import numpy as np
 from pynput import keyboard
 import time
 path_depth = '/home/allen/dl_grasp/src/rs_d435i/pic/depth/'
-pic_num=179
+pic_num=300
 if __name__ == '__main__':
     rospy.init_node('get_d435i_module_image', anonymous=True)
     listener = Get_image()
