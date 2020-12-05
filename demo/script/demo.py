@@ -36,8 +36,8 @@ from cv_bridge import CvBridge, CvBridgeError
 net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
 
 def plot_result(img,ix,iy,tx,ty):
-    cv2.circle(img, (int(ix),int(iy)),5,(255, 0, 0),2)
-    cv2.line(img,(int(ix+tx),int(iy+ty)),(int(ix-tx),int(iy-ty)),(255,0,0),2)
+    cv2.circle(img, (int(ix),int(iy)),5,(0, 255, 0),5)
+    cv2.line(img,(int(ix+tx),int(iy+ty)),(int(ix-tx),int(iy-ty)),(0,0,255),5)
     return img
 
 def trans_degree(x,y,degree):
@@ -94,7 +94,7 @@ def main():
         kernel = np.ones((3,3), np.uint8)
         depth_img = cv2.dilate(depth_img, kernel, iterations = 1)
         #####Dilation 
-        kernel = np.ones((5,5), np.uint8)
+        kernel = np.ones((3,3), np.uint8)
         depth_img = cv2.erode(depth_img, kernel, iterations = 1)
         ####################################
         net_input = depth_img.reshape(-1,480,640,1)/255

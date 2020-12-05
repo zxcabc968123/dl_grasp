@@ -60,8 +60,12 @@ def main():
         print('Img :'+data1[i])
         print('target_x : {} terget_y : {}'.format(data2[i],data3[i]))
         print('angle :{}'.format(data4[i]))
-        image=cv2.imread(data1[i],0)
-        print(image.shape)
+        image=cv2.imread(data1[i],3)
+        (a,b) = image.shape[:2]
+        # for k in range(a):
+        #     for j in range(b):
+        #         if image[k][j][0]<10:
+        #             image[k][j] = (243,243,243)
         cv2.circle(image, (data2[i],data3[i]), 5, (0,0,255),3)
         cv2.rectangle(image,(data5[i],data6[i]),(data7[i],data8[i])\
             ,(255, 0, 0),2)

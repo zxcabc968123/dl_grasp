@@ -31,13 +31,14 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
 net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
+#net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_nodropoutv5'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15
-x_locate_range = 30
-y_locate_range = 30
+x_locate_range = 20
+y_locate_range = 20
 
 def custom_loss(y_actual,y_pred):
     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
@@ -191,6 +192,7 @@ def main():
         cv2.circle(result_img, (int(data2[i]),int(data3[i])),5,  (255, 0, 0),2)
         temp_x,temp_y=trans_degree(data2[i],data3[i],data4[i])
         cv2.line(result_img,(int(data2[i]+temp_x),int(data3[i]+temp_y)),(int(data2[i]-temp_x),int(data3[i]-temp_y)),(255,0,0),2)
+        #cv2.line(result_img,(int(data2[i]+temp_x),int(data3[i]+temp_y)),(int(data2[i]),int(data3[i])),(255,0,0),2)
         ######
         cv2.imshow('result_img',result_img)
         cv2.waitKey(0)

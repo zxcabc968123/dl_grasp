@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from my_classesv2 import *
+from my_classes import *
 
 lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 #data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_2000-11-18_07_30_55.csv'
@@ -8,7 +8,7 @@ lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_7000data_2020-11-20_07_01_25_.csv'
 test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1121_14object_dropoutv6'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_nodropoutv5'
 EPOCHS = 2000
 batch_size = 50
 
@@ -36,7 +36,7 @@ def main():
     #solve_cudnn_error()
     CNN=keras.Sequential()
     #add convolution layer filter 32 3*3 activation funtion relu
-    CNN.add(layers.Conv2D(16,(3,3),activation=lrelu,input_shape=(256,256,1),strides=(2,2)))
+    CNN.add(layers.Conv2D(16,(3,3),activation=lrelu,input_shape=(480,640,1),strides=(2,2)))
     #add pooling layer 3*3 478*638
     CNN.add(layers.MaxPooling2D((2,2)))
     #add convolution layer filter 16 3*3 activation funtion relu 239*319
@@ -59,10 +59,10 @@ def main():
     CNN.add(layers.Flatten())
     
     #####Dropout
-    CNN.add(layers.Dropout(0.5))
+    #CNN.add(layers.Dropout(0.5))
     CNN.add(layers.Dense(256,activation=lrelu))
 
-    CNN.add(layers.Dropout(0.5))
+    #CNN.add(layers.Dropout(0.5))
     CNN.add(layers.Dense(128,activation=lrelu))
 
     CNN.add(layers.Dense(64,activation=lrelu))
