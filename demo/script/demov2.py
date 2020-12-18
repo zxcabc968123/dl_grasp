@@ -5,7 +5,7 @@ sys.path.insert(1, "/home/allen/.local/lib/python3.5/site-packages/")
 sys.path.insert(2, "/home/allen/realsensepkg/catkin_workspace/install/lib/python3/dist-packages")
 import rospy
 import cv2
-from get_rs_image import Get_image
+from get_rs_image import Get_image,Get_imagev2
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 from pynput import keyboard
@@ -72,7 +72,7 @@ def custom_loss(y_actual,y_pred):
 def main():
     rospy.init_node('get_d435i_module_image', anonymous=True)
     listener_rgb = Get_image()
-    listener_depth = Get_image()
+    listener_depth = Get_imagev2()
     reload_sm_keras = tf.keras.models.load_model(net_path,custom_objects={'custom_loss': custom_loss})
     reload_sm_keras.summary()
 
@@ -83,20 +83,20 @@ def main():
             rgb_img = listener_rgb.cv_image
             #cv2.imshow("rgb module image", listener_rgb.cv_image)
         if(listener_depth.display_mode == 'depth')and(type(listener_depth.cv_depth) is np.ndarray):
-            print(listener_depth.cv_depth)
-            depth_img=cv2.cvtColor(listener_depth.cv_depth,cv2.COLOR_BGR2GRAY)
+            #print(listener_depth.cv_depth)
+            depth_img=listener_depth.cv_depth
             #cv2.imshow("depth module image", depth_img)
         ####################################
-        (h, w) = depth_img.shape[:2]
-        for i in range(h):
-            for j in range(w):
-                if depth_img[i][j]<=80:
-                    depth_img[i][j]=rand.randint(243,245)
-        kernel = np.ones((3,3), np.uint8)
-        depth_img = cv2.dilate(depth_img, kernel, iterations = 1)
-        #####Dilation 
-        kernel = np.ones((3,3), np.uint8)
-        depth_img = cv2.erode(depth_img, kernel, iterations = 1)
+        # (h, w) = depth_img.shape[:2]
+        # for i in range(h):
+        #     for j in range(w):
+        #         if depth_img[i][j]<=80:
+        #             depth_img[i][j]=rand.randint(243,245)
+        # kernel = np.ones((3,3), np.uint8)
+        # depth_img = cv2.dilate(depth_img, kernel, iterations = 1)
+        # #####Dilation 
+        # kernel = np.ones((3,3), np.uint8)
+        # depth_img = cv2.erode(depth_img, kernel, iterations = 1)
         ####################################
         net_input = depth_img.reshape(-1,480,640,1)/255
         predict_point=reload_sm_keras.predict([net_input])

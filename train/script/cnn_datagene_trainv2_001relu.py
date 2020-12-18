@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 from my_classes import *
 
-lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
+lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.01)
 #data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_2000-11-18_07_30_55.csv'
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_80_2020-11-18_07_50_16.csv'
 #data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_7000data_2020-11-20_07_01_25_.csv'
 test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_relu'
 EPOCHS = 2000
 batch_size = 50
 

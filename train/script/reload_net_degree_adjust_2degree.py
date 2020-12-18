@@ -30,8 +30,8 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
-#net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_nodropoutv5'
+#net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_relu'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
@@ -69,7 +69,7 @@ def create_result_array(data2,data3,data4):
         cos_pi = math.cos(2*diameter)
         sin_pi = math.sin(2*diameter)
         result_array[i]=[data2[i]/640,data3[i]/480,cos_pi,sin_pi]
-        print('cos : {} sin : {}'.format(cos_pi,sin_pi))
+        #print('cos : {} sin : {}'.format(cos_pi,sin_pi))
     return result_array
 
 def create_photo_array(data1):

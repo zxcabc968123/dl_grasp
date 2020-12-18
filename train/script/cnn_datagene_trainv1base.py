@@ -8,7 +8,7 @@ lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_7000data_2020-11-20_07_01_25_.csv'
 test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_base'
 EPOCHS = 2000
 batch_size = 50
 
@@ -28,7 +28,7 @@ def custom_loss(y_actual,y_pred):
     cos_gap = tf.square(y_pred[:,2]-y_actual[:,2])
     sin_gap =  tf.square(y_pred[:,3]-y_actual[:,3])
 
-    loss = 1.2*x_gap + 1.2*y_gap + cos_gap + sin_gap
+    loss = x_gap + y_gap + cos_gap + sin_gap
 
     return tf.math.reduce_mean(loss)
 
@@ -48,28 +48,31 @@ def main():
     # 118*158
     CNN.add(layers.MaxPooling2D((2,2)))
     # 59*79
+    ##
     CNN.add(layers.Conv2D(32,(3,3),activation=lrelu))
     # 58*78
     # CNN.add(layers.MaxPooling2D((2,2)))
     # 29*39
-    CNN.add(layers.Conv2D(64,(3,3),activation=lrelu))
+    ######################################
+    #CNN.add(layers.Conv2D(64,(3,3),activation=lrelu))
+    ######################################
     # 26*36
     #CNN.add(layers.MaxPooling2D((2,2)))
 
     CNN.add(layers.Flatten())
     
     #####Dropout
-    CNN.add(layers.Dropout(0.5))
-    CNN.add(layers.Dense(256,activation=lrelu))
-
-    CNN.add(layers.Dropout(0.5))
-    CNN.add(layers.Dense(128,activation=lrelu))
-
+    #CNN.add(layers.Dropout(0.5))
     CNN.add(layers.Dense(64,activation=lrelu))
 
+    #CNN.add(layers.Dropout(0.5))
     CNN.add(layers.Dense(64,activation=lrelu))
+
+    CNN.add(layers.Dense(32,activation=lrelu))
+
+    CNN.add(layers.Dense(32,activation=lrelu))
     #dropoutv5 add fully-connected layer
-    CNN.add(layers.Dense(64,activation=lrelu))
+    #CNN.add(layers.Dense(64,activation=lrelu))
 
     #CNN.add(layers.Dense(4))
     CNN.add(layers.Dense(4))
@@ -96,7 +99,7 @@ def main():
     plt.plot(epochs_range, loss, label='Training Loss')
     plt.plot(epochs_range, val_loss, label='Testing Loss',color=(100/255,255/255,100/255))
     plt.plot(epochs_range, acc, label='Training acc',color=(255/255,100/255,100/255))
-    #plt.legend(loc='upper left')
+    plt.legend(loc='upper right')
     plt.savefig(save_path+'/loss.png')
     plt.show()
 
