@@ -83,7 +83,6 @@ def main():
             rgb_img = listener_rgb.cv_image
             #cv2.imshow("rgb module image", listener_rgb.cv_image)
         if(listener_depth.display_mode == 'depth')and(type(listener_depth.cv_depth) is np.ndarray):
-            print(listener_depth.cv_depth)
             depth_img=cv2.cvtColor(listener_depth.cv_depth,cv2.COLOR_BGR2GRAY)
             #cv2.imshow("depth module image", depth_img)
         ####################################

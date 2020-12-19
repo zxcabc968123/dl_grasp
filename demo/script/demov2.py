@@ -35,6 +35,13 @@ from cv_bridge import CvBridge, CvBridgeError
 
 net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
 
+def get_depth(img,x,y):
+    range_size = 5
+    (x,y)=(int(x),int(y))
+    b = img[y-5:y+5,x-5:x+5]
+    avg_depth = np.mean(b)
+    #print('avg_depth',avg_depth)
+    return avg_depth
 def plot_result(img,ix,iy,tx,ty):
     cv2.circle(img, (int(ix),int(iy)),5,(0, 255, 0),5)
     cv2.line(img,(int(ix+tx),int(iy+ty)),(int(ix-tx),int(iy-ty)),(0,0,255),5)
@@ -104,6 +111,9 @@ def main():
         predict_point[0][0]=predict_point[0][0]*640
         predict_point[0][1]=predict_point[0][1]*480
         temp_x,temp_y=trans_degree(predict_point[0][0],predict_point[0][1],degree)
+    
+        avg_depth = get_depth(depth_img,predict_point[0][0],predict_point[0][1])
+        print('avg_depth',avg_depth)
         rgb_img = plot_result(rgb_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
         depth_img = plot_result(depth_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
         cv2.imshow("rgb module image",rgb_img)
