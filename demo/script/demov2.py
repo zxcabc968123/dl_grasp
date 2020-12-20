@@ -32,16 +32,39 @@ sys.path.insert(1, "/home/allen/.local/lib/python3.5/site-packages/")
 sys.path.insert(0, '/opt/installer/open_cv/cv_bridge/lib/python3/dist-packages/')
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
+from demo.srv import lungrasp 
+
+target_confi =False
+target_x = 0.0
+target_y = 0.0
+target_z = 0.0
+target_ang = 0.0
+target_is_done = True
 
 net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
+def cal_psnr(im1,im2):
+    global target_confi
+    im1= im1.reshape(480,640,1)
+    im2= im2.reshape(480,640,1)
+    #im1 = tf.image.convert_image_dtype(im1, tf.float32)
+    #im2 = tf.image.convert_image_dtype(im2, tf.float32)
+    y = tf.image.psnr(im1, im2, max_val=255)
+    num = float(y)
+    if num<46:
+        target_confi = True
+    else:
+        target_confi = False
+    return num
 
 def get_depth(img,x,y):
+    global target_z
     range_size = 5
     (x,y)=(int(x),int(y))
     b = img[y-5:y+5,x-5:x+5]
     avg_depth = np.mean(b)
-    #print('avg_depth',avg_depth)
+    target_z = float(avg_depth)
     return avg_depth
+
 def plot_result(img,ix,iy,tx,ty):
     cv2.circle(img, (int(ix),int(iy)),5,(0, 255, 0),5)
     cv2.line(img,(int(ix+tx),int(iy+ty)),(int(ix-tx),int(iy-ty)),(0,0,255),5)
@@ -60,8 +83,10 @@ def trans_degree(x,y,degree):
     return (round(tmp_x),round(tmp_y))
 
 def arctan_recovery(cos_x,sin_x):
+    global target_ang
     predict_degree = 0.5*np.arctan2(sin_x,cos_x)
     predict_degree=predict_degree/math.pi*180
+    target_ang = predict_degree
     return predict_degree
 
 
@@ -75,24 +100,38 @@ def custom_loss(y_actual,y_pred):
 
     #return tf.math.sqrt(tf.math.reduce_mean(loss))
     return tf.math.reduce_mean(loss)
-
+def trans_inf(req):
+    print('Get the request')
+    # global target_confi
+    # global target_x
+    # global target_y
+    # global target_z
+    # global target_ang
+    # global target_is_done
+    a = target_confi
+    b = target_x
+    c = target_y
+    d = target_z
+    e = target_ang
+    f = target_is_done
+    return [a,b,c,d,e,f]
 def main():
     rospy.init_node('get_d435i_module_image', anonymous=True)
+    #s=rospy.Service('grasp_detection',lungrasp,trans_inf)
     listener_rgb = Get_image()
     listener_depth = Get_imagev2()
     reload_sm_keras = tf.keras.models.load_model(net_path,custom_objects={'custom_loss': custom_loss})
     reload_sm_keras.summary()
-
+    background = cv2.imread("/home/allen/dl_grasp/src/data_expend/background/background_7.jpg",0)
+    s=rospy.Service('grasp_detection',lungrasp,trans_inf)
+    #rospy.spin()
     while not rospy.is_shutdown():
         listener_depth.display_mode = 'depth'
         listener_rgb.display_mode = 'rgb'
         if(listener_rgb.display_mode == 'rgb')and(type(listener_rgb.cv_image) is np.ndarray):
             rgb_img = listener_rgb.cv_image
-            #cv2.imshow("rgb module image", listener_rgb.cv_image)
         if(listener_depth.display_mode == 'depth')and(type(listener_depth.cv_depth) is np.ndarray):
-            #print(listener_depth.cv_depth)
             depth_img=listener_depth.cv_depth
-            #cv2.imshow("depth module image", depth_img)
         ####################################
         # (h, w) = depth_img.shape[:2]
         # for i in range(h):
@@ -105,29 +144,26 @@ def main():
         # kernel = np.ones((3,3), np.uint8)
         # depth_img = cv2.erode(depth_img, kernel, iterations = 1)
         ####################################
+        psnr = cal_psnr(background,depth_img)
+        print('psnr : ',psnr)
         net_input = depth_img.reshape(-1,480,640,1)/255
         predict_point=reload_sm_keras.predict([net_input])
         degree = arctan_recovery(predict_point[0][2],predict_point[0][3])
         predict_point[0][0]=predict_point[0][0]*640
         predict_point[0][1]=predict_point[0][1]*480
+        global target_x
+        global target_y
+        target_x = predict_point[0][0]
+        target_y = predict_point[0][1]
         temp_x,temp_y=trans_degree(predict_point[0][0],predict_point[0][1],degree)
     
         avg_depth = get_depth(depth_img,predict_point[0][0],predict_point[0][1])
-        print('avg_depth',avg_depth)
-        rgb_img = plot_result(rgb_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
-        depth_img = plot_result(depth_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
+        #print('avg_depth : ',avg_depth)
+        if psnr<46:
+            rgb_img = plot_result(rgb_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
+            depth_img = plot_result(depth_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
         cv2.imshow("rgb module image",rgb_img)
         cv2.imshow("depth module image", depth_img)
-
-            # key_num = cv2.waitKey(10)
-            # print(key_num)
-            # if key_num == 115:
-            #     cv2.imwrite(path_depth+str(pic_num) + '.jpg',listener.cv_depth)
-            #     print('Save picture '+str(pic_num))
-            #     pic_num=pic_num+1
-        
-
-
         cv2.waitKey(1)
 
 if __name__ == "__main__":
