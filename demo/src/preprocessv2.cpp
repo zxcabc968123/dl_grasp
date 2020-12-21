@@ -117,8 +117,8 @@ class ImageConverter
         // pub.publish(cv_ptr->toImageMsg());
         // loop_rate.sleep();
         //ROS_INFO("psnr : %f",this->psnr);
-        cv::imshow("OPENCV_WINDOW", this->preimage);
-        cv::waitKey(1);
+        // cv::imshow("OPENCV_WINDOW", this->preimage);
+        // cv::waitKey(1);
         this->preimage=img;
     };
 int main( int argc,char** argv)
