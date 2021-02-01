@@ -1,0 +1,3 @@
+image_path,target_x,target_y,target_angle,ix,iy,rx,ry
+/home/allen/dl_grasp/src/data_expend/origin_img/img/blue_bottle/blue_bottle_8.jpg,515,282,9,449,119,581,445
+/home/allen/dl_grasp/src/data_expend/origin_img/img/blue_bottle/blue_bottle_15.jpg,340,191,150,257,33,423,349

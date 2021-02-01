@@ -31,14 +31,14 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_relu'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
 
 angle_range = 15
-x_locate_range = 20
-y_locate_range = 20
+x_locate_range = 25
+y_locate_range = 25
 
 def custom_loss(y_actual,y_pred):
     x_gap = tf.square(y_pred[:,0]-y_actual[:,0])
@@ -177,6 +177,7 @@ def main():
             ((abs(data4[i]-predict_degree_array[0])<=angle_range)or(abs(data4[i]-predict_degree_array[1])<=angle_range)):
             accurate_num=accurate_num+1
     print('limit : x: {} y: {} angle: {}'.format(x_locate_range,y_locate_range,angle_range))
+    print('net_path : {}'.format(net_path))
     print('accurate_num : {}'.format(accurate_num/len(validation_input)*100))
     print('x_mae : {}'.format(difference[0]/len(validation_input)))
     print('y_mae : {}'.format(difference[1]/len(validation_input)))

@@ -8,8 +8,9 @@ lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_7000data_2020-11-20_07_01_25_.csv'
 test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/14object_560data_2020-11-20_07_34_53_.csv'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_base'
-EPOCHS = 2000
+#save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_base'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/MAETEST'
+EPOCHS = 1
 batch_size = 50
 
 training_generator = DataGenerator(data_path,batch_size)
@@ -98,9 +99,9 @@ def main():
 
     plt.plot(epochs_range, loss, label='Training Loss')
     plt.plot(epochs_range, val_loss, label='Testing Loss',color=(100/255,255/255,100/255))
-    plt.plot(epochs_range, acc, label='Training acc',color=(255/255,100/255,100/255))
+    plt.plot(epochs_range, acc, label='Training MAE',color=(255/255,100/255,100/255))
     plt.legend(loc='upper right')
-    plt.savefig(save_path+'/loss.png')
+    plt.savefig(save_path+'/lossmae.png')
     plt.show()
 
 

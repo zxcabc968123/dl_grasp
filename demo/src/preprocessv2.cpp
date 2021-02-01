@@ -92,7 +92,7 @@ class ImageConverter
         ros::Rate loop_rate(100);
         
         cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_16UC1);
-        dilate(cv_ptr->image, img, element,Point(-1,-1),4);
+        dilate(cv_ptr->image, img, element,Point(-1,-1),2);
         erode(img, img, element,Point(-1,-1),2);
         cv::convertScaleAbs(img,img,0.57);
         ////

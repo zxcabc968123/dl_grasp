@@ -1,0 +1,16 @@
+<launch>
+
+<arg name="port" default="/dev/ttyUSB0"/>
+
+
+<include file="$(find realsense2_camera)/launch/rs_rgbd.launch">  
+</include>
+
+<node name="preprocess" pkg="demo" type="preprocessv2"/> 
+
+<node name="grasp_detection" pkg="demo" type="demov2_samezero.py" output="screen"/>
+
+<node name="gripper_ros" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" 
+args="$(arg port)"/>
+
+</launch>

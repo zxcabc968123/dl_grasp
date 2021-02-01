@@ -40,7 +40,10 @@ target_y = 0.0
 target_z = 0.0
 target_ang = 0.0
 target_is_done = True
-
+typeof = 'nonotrain'
+typeof = 'notrain'
+save_imgpath = '/home/allen/dl_grasp/src/result/nono_trained/'
+save_imgpath = '/home/allen/dl_grasp/src/result/no_trained/'
 net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
 def cal_psnr(im1,im2):
     global target_confi
@@ -50,7 +53,7 @@ def cal_psnr(im1,im2):
     #im2 = tf.image.convert_image_dtype(im2, tf.float32)
     y = tf.image.psnr(im1, im2, max_val=255)
     num = float(y)
-    if num<46:
+    if num<46.5:
         target_confi = True
     else:
         target_confi = False
@@ -159,12 +162,24 @@ def main():
     
         avg_depth = get_depth(depth_img,predict_point[0][0],predict_point[0][1])
         #print('avg_depth : ',avg_depth)
-        if psnr<46:
+        if psnr<46.8:
             rgb_img = plot_result(rgb_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
             depth_img = plot_result(depth_img,predict_point[0][0],predict_point[0][1],temp_x,temp_y)
         cv2.imshow("rgb module image",rgb_img)
         cv2.imshow("depth module image", depth_img)
-        cv2.waitKey(1)
+        
+        ##############################
+        dirs = os.listdir(save_imgpath)
+        img_num = len(dirs)/2
+        key_num = cv2.waitKey(1)
+            #print(key_num)
+        if key_num == 115:
+            save_num = img_num+1
+            cv2.imwrite(save_imgpath+str(typeof)+str(int(save_num))+'_rgb.jpg',rgb_img)
+            cv2.imwrite(save_imgpath+str(typeof)+str(int(save_num))+'_dep.jpg',depth_img)
+            print('Save picture '+str(int(save_num)))
+        ################################
+        #cv2.waitKey(1)
 
 if __name__ == "__main__":
     main()
