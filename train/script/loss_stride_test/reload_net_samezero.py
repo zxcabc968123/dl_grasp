@@ -31,7 +31,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/CNN_MSE201105_adjustdegree_normalize_nodrop_losschange_dropout'
 #net_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1120_14object_dropoutv5'
-net_path = '/home/allen/dl_grasp/src/train/Save_net/5object_losstype_check/MAE'
+net_path = '/home/allen/dl_grasp/src/train/Save_net/5object_stride_check/2221'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/40data_2020-10-29_16_16_22_.csv'
 data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_200_0126.csv'
 #data_csv = '/home/allen/dl_grasp/src/data_expend/expand_data/1000blackdata_2020-10-28_07_13_23_.csv'
@@ -156,10 +156,6 @@ def main():
     difference = [0.0, 0.0, 0.0]
     pre_time = 0.0
     accurate_num = 0
-    accurate_locate = 0
-    accurate_ang = 0
-
-
     for i in range(len(validation_input)):
         temp_input=validation_input[i].reshape(-1,480,640,1)
         ##########predict time#######
@@ -180,25 +176,18 @@ def main():
             predict_degree_array=np.array([predict_degree,predict_degree+180])
         #############################
         difference[2] += abs(data4[i]-predict_degree)
-        #########################
-        if (abs(data2[i]-predict_point[0][0])<=x_locate_range )&(abs(data3[i]-predict_point[0][1])<=y_locate_range):
-            accurate_locate = accurate_locate+1
-        if ((abs(data4[i]-predict_degree_array[0])<=angle_range)or(abs(data4[i]-predict_degree_array[1])<=angle_range)):
-            accurate_ang = accurate_ang+1
-        ##########################
+
         if (abs(data2[i]-predict_point[0][0])<=x_locate_range )&(abs(data3[i]-predict_point[0][1])<=y_locate_range)&\
             ((abs(data4[i]-predict_degree_array[0])<=angle_range)or(abs(data4[i]-predict_degree_array[1])<=angle_range)):
             accurate_num=accurate_num+1
     print('limit : x: {} y: {} angle: {}'.format(x_locate_range,y_locate_range,angle_range))
     print('net_path : {}'.format(net_path))
-    print('accurate_locate : {}'.format(accurate_locate/len(validation_input)*100))
-    print('accurate_ang : {}'.format(accurate_ang/len(validation_input)*100))
     print('accurate_num : {}'.format(accurate_num/len(validation_input)*100))
     print('x_mae : {}'.format(difference[0]/len(validation_input)))
     print('y_mae : {}'.format(difference[1]/len(validation_input)))
     print('angle_mae : {}'.format(difference[2]/len(validation_input)))
     print('all_mae : {}'.format((difference[0]+difference[1]+difference[2])/len(validation_input)))
-    print('average_time : {}'.format(pre_time/len(validation_input)))
+    print('average_time : {} FPS : {}'.format(pre_time/len(validation_input),1/(pre_time/len(validation_input))))
 
     for i in range(len(validation_input)):
         print('ground true locate : x: {}  y: {} degree: {}'.format(data2[i],data3[i],data4[i]))

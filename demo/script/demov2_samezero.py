@@ -33,7 +33,7 @@ sys.path.insert(0, '/opt/installer/open_cv/cv_bridge/lib/python3/dist-packages/'
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 from demo.srv import lungrasp 
-psnr_limit = 44.5
+psnr_limit = 46.6
 
 target_confi =False
 target_x = 0.0

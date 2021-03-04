@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from my_classes_samezero import *
-
+###################################################2221
 lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 #data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_2000-11-18_07_30_55.csv'
 #test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/4object_80_2020-11-18_07_50_16.csv'
@@ -9,8 +9,8 @@ lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1)
 data_path = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_2000_0126.csv'
 test_path = '/home/allen/dl_grasp/src/data_expend/expand_data/5object_200_0126.csv'
 #save_path = '/home/allen/dl_grasp/src/train/Save_net/14object/drop/1213_base'
-save_path = '/home/allen/dl_grasp/src/train/Save_net/5object_losstype_check/MAE'
-model_type = 'Base mode(MAE)'
+save_path = '/home/allen/dl_grasp/src/train/Save_net/5object_stride_check/2221'
+model_type = 'Base mode(stride 2221)'
 EPOCHS = 500
 batch_size = 50
 
@@ -30,7 +30,7 @@ def custom_loss(y_actual,y_pred):
     cos_gap = tf.square(y_pred[:,2]-y_actual[:,2])
     sin_gap =  tf.square(y_pred[:,3]-y_actual[:,3])
 
-    loss = x_gap + y_gap + cos_gap + sin_gap
+    loss = 1.2*x_gap + 1.2*y_gap + cos_gap + sin_gap
 
     return tf.math.reduce_mean(loss)
 
@@ -46,7 +46,7 @@ def main():
     #add pooling layer 3*3 237*317
     CNN.add(layers.MaxPooling2D((2,2)))
     # 119*159
-    CNN.add(layers.Conv2D(32,(3,3),activation=lrelu))
+    CNN.add(layers.Conv2D(32,(3,3),activation=lrelu,strides=(2,2)))
     # 118*158
     CNN.add(layers.MaxPooling2D((2,2)))
     # 59*79
@@ -79,8 +79,8 @@ def main():
     #CNN.add(layers.Dense(4))
     CNN.add(layers.Dense(4))
 
-    CNN.compile(loss='mean_absolute_error',optimizer=tf.keras.optimizers.Adam(0.0001),metrics=['mae'])
-    CNN.compile(loss=custom_loss,optimizer=tf.keras.optimizers.Adam(0.0001),metrics=['mae'])
+    CNN.compile(loss='mean_squared_error',optimizer=tf.keras.optimizers.Adam(0.0001),metrics=['mae'])
+    #CNN.compile(loss=custom_loss,optimizer=tf.keras.optimizers.Adam(0.0001),metrics=['mae'])
     CNN.summary()
 
     #result=CNN.fit(train_photo_array,train_result_array,validation_data=(test_photo_array, test_result_array),batch_size=Batch_size,epochs=EPOCHS,shuffle=True,verbose=1,callbacks=[custom_early_stopping])
